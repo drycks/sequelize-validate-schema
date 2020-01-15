@@ -4,10 +4,11 @@ const Sequelize = require("sequelize");
 const assert = require("assert");
 const Promise = require("bluebird");
 const _ = require("lodash");
+const pluralize = require("pluralize");
 const dataTypeToDBTypeDialect = {
     postgres: (attr) => {
         if (attr.type instanceof Sequelize.STRING) {
-            return `CHARACTER VARYING(${attr.type._length})`;
+            return `CHARACTER VARYING(${attr.type.options.length})`;
         }
         else if (attr.type instanceof Sequelize.BIGINT) {
             return 'BIGINT';
@@ -27,7 +28,7 @@ const dataTypeToDBTypeDialect = {
     },
     mysql: (attr) => {
         if (attr.type instanceof Sequelize.STRING) {
-            return `VARCHAR(${attr.type._length})`;
+            return `VARCHAR(${attr.type.options.length})`;
         }
         else if (attr.type instanceof Sequelize.BIGINT) {
             return 'BIGINT(20)';
@@ -125,7 +126,10 @@ exports.validateSchemas = (sequelize, options) => {
                 return !_.includes(options.exclude, tableName);
             })
                 .map(tableName => {
-                return sequelize.model(tableName);
+                if (!options.freezeTableNames) {
+                    return sequelize.model(tableName);
+                }
+                return sequelize.model(pluralize.pluralize(tableName));
             })
                 .map(model => {
                 return checkAttributes(queryInterface, model.tableName, model, options)

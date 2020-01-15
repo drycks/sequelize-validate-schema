@@ -12,7 +12,8 @@
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "inlineSourceMap": false,
-    "jsx": "react"
+    "jsx": "react",
+    "types":["mocha", "node"]
   },
   "include": [
     "./src/ts/**/*.ts",

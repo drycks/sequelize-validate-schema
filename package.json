@@ -56,10 +56,12 @@
     "bluebird": "^3.5.1",
     "lodash": "^4.17.5",
     "mysql2": "^1.5.2",
-    "sequelize": "^4.33.4"
+    "pluralize": "^8.0.0",
+    "sequelize": "^5.15.1"
   },
   "devDependencies": {
     "@types/bluebird": "^3.5.20",
+    "@types/jest": "^24.9.0",
     "@types/lodash": "^4.14.104",
     "@types/mocha": "^2.2.48",
     "@types/node": "^9.4.6",
@@ -73,9 +75,9 @@
     "power-assert": "^1.4.4",
     "remap-istanbul": "^0.10.1",
     "rimraf": "^2.6.2",
-    "sequelize-typescript": "^0.6.2",
+    "sequelize-typescript": "^1.1.0",
     "ts-node": "^5.0.0",
-    "typescript": "^2.7.2"
+    "typescript": "^3.6.3"
   },
   "optionalDependencies": {
     "fsevents": "^1.1.3"

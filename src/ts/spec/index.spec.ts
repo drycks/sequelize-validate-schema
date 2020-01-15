@@ -14,7 +14,7 @@ describe("index", () => {
         let sequelize: any;
         let queryInterface: any;
         beforeEach(function () {
-          sequelize = new Sequelize(DATABASE_URL, {
+          sequelize = new Sequelize.Sequelize(DATABASE_URL, {
             logging: false,
             pool: {
               max: 3

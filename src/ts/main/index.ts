@@ -2,6 +2,7 @@ import * as Sequelize from "sequelize";
 import * as assert from "assert";
 import * as Promise from "bluebird";
 import * as _ from "lodash";
+import * as pluralize from "pluralize";
 
 
 interface IModelAttribute {
@@ -24,7 +25,7 @@ interface IRawModel {
 }
 
 interface IDescribedAttribute {
-  type: string
+  type: any
   allowNull: boolean
   defaultValue: any
   primaryKey: boolean
@@ -40,7 +41,7 @@ const dataTypeToDBTypeDialect: {
 
     // this support only postgres
     if (attr.type instanceof Sequelize.STRING) {
-      return `CHARACTER VARYING(${attr.type._length})`;
+      return `CHARACTER VARYING(${attr.type.options.length})`;
     } else if (attr.type instanceof Sequelize.BIGINT) {
       return 'BIGINT';
     } else if (attr.type instanceof Sequelize.INTEGER) {
@@ -57,7 +58,7 @@ const dataTypeToDBTypeDialect: {
 
     // this support only postgres
     if (attr.type instanceof Sequelize.STRING) {
-      return `VARCHAR(${attr.type._length})`;
+      return `VARCHAR(${attr.type.options.length})`;
     } else if (attr.type instanceof Sequelize.BIGINT) {
       return 'BIGINT(20)';
     } else if (attr.type instanceof Sequelize.INTEGER) {
@@ -171,7 +172,10 @@ export const validateSchemas = (sequelize: any, options?) => {
                 return !_.includes(options.exclude, tableName);
               })
               .map(tableName => {
-                return sequelize.model(tableName);
+                if(!options.freezeTableNames) {
+                  return sequelize.model(tableName);
+                }
+                return sequelize.model(pluralize.pluralize(tableName));
               })
               .map(model => {
                 return checkAttributes(queryInterface, model.tableName, model, options)
